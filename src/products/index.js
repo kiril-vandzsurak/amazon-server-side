@@ -27,4 +27,11 @@ router.post("/", (req, res) => {
   res.status(201).send({ id: newObj.id });
 });
 
+router.get("/:id", (req, res) => {
+  const id = req.params.id;
+  const productsArray = JSON.parse(fs.readFileSync(productsJSONPath));
+  const findObj = productsArray.find((product) => product.id === id);
+  res.send(findObj);
+});
+
 export default router;
