@@ -19,12 +19,12 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   console.log("REQUEST BODY:", req.body);
-  const newObj = { ...req.body, createdAt: new Date(), id: uniqid() };
-  console.log("NEW OBJECT", newObj);
-  const objArray = JSON.parse(fs.readFileSync(productsJSONPath));
-  objArray.push(newObj);
-  fs.writeFileSync(productsJSONPath, JSON.stringify(objArray));
-  res.status(201).send({ id: newObj.id });
+  const newProduct = { ...req.body, createdAt: new Date(), id: uniqid() };
+  console.log("NEW OBJECT", newProduct);
+  const productsArray = JSON.parse(fs.readFileSync(productsJSONPath));
+  productsArray.push(newProduct);
+  fs.writeFileSync(productsJSONPath, JSON.stringify(productsArray));
+  res.status(201).send({ id: newProduct.id });
 });
 
 router.get("/:id", (req, res) => {
@@ -32,6 +32,18 @@ router.get("/:id", (req, res) => {
   const productsArray = JSON.parse(fs.readFileSync(productsJSONPath));
   const findObj = productsArray.find((product) => product.id === id);
   res.send(findObj);
+});
+
+router.put("/:id", (req, res) => {
+  const productsArray = JSON.parse(fs.readFileSync(productsJSONPath));
+  const index = productsArray.findIndex(
+    (product) => product.id === req.params.id
+  );
+  const oldProduct = productsArray[index];
+  const updateProduct = { ...oldProduct, ...req.body, updatedAt: new Date() };
+  productsArray[index] = updateProduct;
+  fs.writeFileSync(productsJSONPath, JSON.stringify(productsArray));
+  res.send(updateProduct);
 });
 
 export default router;
