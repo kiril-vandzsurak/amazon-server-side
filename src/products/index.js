@@ -46,4 +46,13 @@ router.put("/:id", (req, res) => {
   res.send(updateProduct);
 });
 
+router.delete("/:id", (req, res) => {
+  const productsArray = JSON.parse(fs.readFileSync(productsJSONPath));
+  const remainingProducts = productsArray.filter(
+    (product) => product.id !== req.params.id
+  );
+  fs.writeFileSync(productsJSONPath, JSON.stringify(remainingProducts));
+  res.status(204).send();
+});
+
 export default router;
