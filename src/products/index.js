@@ -8,7 +8,7 @@ const router = Router();
 
 const productsJSONPath = join(
   dirname(fileURLToPath(import.meta.url)),
-  "products.json"
+  "../data/products.json"
 );
 
 router.get("/", (req, res) => {
